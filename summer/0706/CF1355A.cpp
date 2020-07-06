@@ -3,8 +3,8 @@
 #include <cmath>
 using namespace std;
  
-#define fori(i,s,e) for(int i = s; i < ((int)e); i++)
 #define ll long long
+#define fori(i,s,e) for(ll i = s; i < ((ll)e); i++)
 #define MOD (ll)(1e9+7)
 #define INF (2e9)
 
@@ -31,8 +31,8 @@ ll delta(ll a0) {
 	ll mind = 1000, maxd = -1000;
 	ll a = a0;
 	while (a) {
-		minify(mind, a % 10);
-		maxify(maxd, a % 10);
+		mind = min(mind, a%10);
+		maxd = max(maxd, a%10);
 		a /= 10;
 	}
 	return mind * maxd;

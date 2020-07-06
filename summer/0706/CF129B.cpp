@@ -1,14 +1,11 @@
-#include <iostream>
-#include <algorithm>
-#include <cmath>
-#include <vector>
-#include <string>
+#include <bits/stdc++.h>
 using namespace std;
- 
+using ll = long long;
+using ci = const int;
+using vi = vector<int>;
+
 #define fori(i, s, e) for(int i = s; i < ((int)e); ++i)
 #define forj(i, s, e) for(int i = s; i > ((int)e); --i)
-#define ll long long
-#define ci const int
 #define MOD (ll)(1e9+7)
 #define INF (2e9)
 
@@ -35,7 +32,7 @@ ci N = 108;
 int n, m;
 int deg[N];
 bool exists[N];
-vector<int> graph[N];
+vi graph[N];
 
 void solve() {
 	cin >> n >> m;
@@ -55,7 +52,7 @@ void solve() {
 
 	int nSteps = 0;
 	while (true) {
-		vector<int> toDel;
+		vi toDel;
 		fori(i, 0, n) {
 			if (exists[i] && deg[i] == 1) {
 				toDel.push_back(i);
@@ -63,8 +60,8 @@ void solve() {
 		}
 		if (!toDel.size())
 			break;
-		for (const int &i : toDel) {
-			for (const int &j : graph[i]) {
+		for (ci &i : toDel) {
+			for (ci &j : graph[i]) {
 				if (exists[j]) {
 					deg[j]--;
 				}
