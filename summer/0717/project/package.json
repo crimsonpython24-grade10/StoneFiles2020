@@ -4,7 +4,8 @@
   "description": "Porting the MUN conference onto the web",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack site_static/js/core/index.js -o static/site/core/index.js && python manage.py runserver"
   },
   "repository": {
     "type": "git",
