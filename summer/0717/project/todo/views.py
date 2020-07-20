@@ -1,6 +1,10 @@
 from django.views.generic.base import TemplateView
 
+from rest_framework import viewsets
+
 from .models import Todo
+from .serializers import TodoSerializer
+
 
 class IndexView(TemplateView):
     template_name = "todo/index.html"
@@ -9,3 +13,8 @@ class IndexView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['todos'] = Todo.objects.all()
         return context
+
+
+class TodoViewSet(viewsets.ModelViewSet):
+    queryset = Todo.objects.all()
+    serializer_class = TodoSerializer
