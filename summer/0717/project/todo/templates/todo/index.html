@@ -1,0 +1,5 @@
+<ol>
+  {% for todo in todos %}
+    <ul>{{ todo.title }} - {{ todo.level }} - {{ todo.created }}</ul>
+  {% endfor %}
+</ol>
