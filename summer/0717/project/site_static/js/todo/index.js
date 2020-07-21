@@ -1,19 +1,26 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "antd/dist/antd.css";
-import { Table, Button, Space, Tag, Input, Row, Col } from "antd";
+import {Table, Button, Space, Tag, Input, Row, Col, Popconfirm, message, Typography } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
+import EditModal from "../components/todo/todoform";
 import Navbar from "../components/core/navbar";
 
+const { Title } = Typography;
+
+const confirm = () => {
+  message
+    .loading("Deleting...", 1.8)
+    .then(() => message.success("Todo item deleted!", 1.3));
+};
+
 function compare(a, b) {
-  var n = -1, m = 0;
-  if (a === "important") {n = 2;}
-  else if (a === "normal") {n = 1;}
-  else {n = 0;}
-  if (b === "important") {m = 2;}
-  else if (b === "normal") {m = 1;}
-  else {m = 0;}
+  var n = -1,m = 0;
+  if (a === "important") {n = 2;} else if (a === "normal")
+        {n = 1;} else {n = 0;}
+  if (b === "important") {m = 2;} else if (b === "normal")
+        {m = 1;} else {m = 0;}
   return n - m;
 }
 
@@ -21,47 +28,37 @@ const data = [
   {
     key: "1",
     title: "Call Uber eats w/o my parents",
-    date: "2020-07-20 07:57",
-    levels: ["important"],
-    desc: "This not expandable",
-    expd: false
+    date: "2020-07-20 07:57", levels: ["important"],
+    desc: "This not expandable", expd: false
   },
   {
     key: "2",
     title: "Have dinner",
-    date: "2020-07-21 07:57",
-    levels: ["important"],
-    desc: "甲吧没",
-    expd: true
+    date: "2020-07-21 07:57", levels: ["important"],
+    desc: "甲吧没", expd: true
   },
   {
     key: "3",
     title: "A normal sleep",
-    date: "2020-07-20 07:57",
-    levels: ["normal"],
-    desc: "This not expandable",
-    expd: false
+    date: "2020-07-20 07:57", levels: ["normal"],
+    desc: "This not expandable", expd: false
   },
   {
     key: "4",
     title: "Sleep if I had been coding > 4 hrs",
-    date: "2020-07-20 07:57",
-    levels: ["unimportant"],
-    desc: "No nothing. Yes code",
-    expd: true
+    date: "2020-07-20 07:57", levels: ["unimportant"],
+    desc: "No nothing. Yes code", expd: true
   },
   {
     key: "5",
     title: "School",
-    date: "2020-07-20 07:59",
-    levels: ["unimportant"],
-    desc: "💩",
-    expd: true
+    date: "2020-07-20 07:59", levels: ["unimportant"],
+    desc: "💩", expd: true
   }
 ];
 
 class App extends React.Component {
-  state = {filteredInfo: null, sortedInfo: null};
+  state = { filteredInfo: null, sortedInfo: null };
 
   getColumnSearchProps = dataIndex => ({
     filterDropdown: ({
@@ -100,8 +97,9 @@ class App extends React.Component {
     ),
     onFilter: (value, record) =>
       record[dataIndex]
-        ? record[dataIndex].toString().toLowerCase()
-        .includes(value.toLowerCase()): "",
+        ? record[dataIndex]
+            .toString() .toLowerCase() .includes(value.toLowerCase())
+        : "",
     onFilterDropdownVisibleChange: visible => {
       if (visible) {setTimeout(() => this.searchInput.select());}
     },
@@ -110,14 +108,13 @@ class App extends React.Component {
         <Highlighter
           highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
           searchWords={[this.state.searchText]}
-          autoEscape
-          textToHighlight={text ? text.toString() : ""}
+          autoEscape textToHighlight={text ? text.toString() : ""}
         />
       ) : (text)
   });
   handleChange = (pagination, filters, sorter) => {
     console.log("Various parameters", pagination, filters, sorter);
-    this.setState({filteredInfo: filters, sortedInfo: sorter});
+    this.setState({ filteredInfo: filters, sortedInfo: sorter });
   };
 
   handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -131,17 +128,12 @@ class App extends React.Component {
   };
 
   clearFilters = () => {
-    this.setState({ filteredInfo: null });
-    this.setState({ searchText: "" });
+    this.setState({ filteredInfo: null }); this.setState({ searchText: "" });
   };
-
   clearAll = () => {
-    this.setState({filteredInfo: null, sortedInfo: null});
+    this.setState({ filteredInfo: null, sortedInfo: null });
   };
-
-  onSelectChange = selectedRowKeys => {
-    this.setState({ selectedRowKeys });
-  };
+  onSelectChange = selectedRowKeys => {this.setState({ selectedRowKeys });};
 
   render() {
     let { sortedInfo, filteredInfo } = this.state;
@@ -149,23 +141,27 @@ class App extends React.Component {
     filteredInfo = filteredInfo || {};
     const columns = [
       {
-        title: "Title", dataIndex: "title", key: "title", width: "37%",
+        title: "Title", dataIndex: "title",
+        key: "title", width: "40%",
         filters: [{ text: "Joe", value: "Joe" }, { text: "Jim", value: "Jim" }],
         filteredValue: filteredInfo.title || null,
         onFilter: (value, record) => record.title.includes(value),
         sorter: (a, b) => a.title.length - b.title.length,
         sortOrder: sortedInfo.columnKey === "title" && sortedInfo.order,
         ellipsis: true,
-        ...this.getColumnSearchProps("title")
+        ...this.getColumnSearchProps("title"),
+        render: title => <EditModal title={title} />
       },
       {
-        title: "Date", dataIndex: "date", key: "date", width: "25%",
+        title: "Date", dataIndex: "date",
+        key: "date", width: "25%",
         sorter: (a, b) => a.date - b.date,
         sortOrder: sortedInfo.columnKey === "date" && sortedInfo.order,
         ellipsis: true
       },
       {
-        title: "Level", dataIndex: "levels", key: "levels", width: "23%",
+        title: "Level", dataIndex: "levels",
+        key: "levels", width: "23%",
         filters: [
           { text: "Important", value: "important" },
           { text: "Normal", value: "normal" },
@@ -190,20 +186,35 @@ class App extends React.Component {
         )
       },
       {
-        title: "Action", dataIndex: "", key: "x", width: "15%",
-        render: () => <a>Delete</a>
+        title: "Action", dataIndex: "",
+        key: "x", width: "12%",
+        render: () => (
+          <Popconfirm
+            placement="topRight"
+            title="Are you sure to delete this task?"
+            onConfirm={confirm} okText="Yes" cancelText="No"
+          >
+            <a>delete</a>
+          </Popconfirm>
+        )
       }
     ];
     return (
-      <Row justify="center" align="top">
-        <Col style={{ maxWidth: 1080 }}>
+      <>
+        <Row justify="center" align="top">
+          <Col style={{ maxWidth: 1080 }}>
+            <Title level={2} style={{ paddingTop: 30, paddingBottom: 15 }}>Todos</Title>
+          </Col>
+        </Row>
+        <Row justify="center" align="top">
+          <Col style={{ maxWidth: 1080 }}>
             <Space style={{ marginBottom: 16 }}>
               <Button onClick={this.clearFilters}>Clear filters</Button>
               <Button onClick={this.clearAll}>Clear filters and sorters</Button>
             </Space>
             <Table
-              columns={columns} dataSource={data} onChange={this.handleChange}
-              size="middle"
+              columns={columns} dataSource={data}
+              onChange={this.handleChange} size="middle"
               expandable={{
                 expandedRowRender: record => (
                   <p style={{ margin: 0, paddingLeft: 48 }}>{record.desc}</p>
@@ -211,8 +222,9 @@ class App extends React.Component {
                 rowExpandable: record => record.expd
               }}
             />
-        </Col>
-      </Row>
+          </Col>
+        </Row>
+      </>
     );
   }
 }
