@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack site_static/js/core/index.js -o static/site/core/index.js && python manage.py runserver",
-    "rs": "python manage.py runserver"
+    "rs": "python manage.py runserver",
+    "b_todo": "webpack site_static/js/todo/index.js -o static/site/todo/index.js && python manage.py runserver"
   },
   "repository": {
     "type": "git",
@@ -40,6 +41,7 @@
   "dependencies": {
     "@ant-design/icons": "^4.2.1",
     "antd": "^4.4.1",
+    "react-highlight-words": "^0.16.0",
     "react-recaptcha": "^2.3.10"
   }
 }

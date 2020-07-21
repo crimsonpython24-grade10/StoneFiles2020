@@ -1,5 +1,16 @@
-<ol>
-  {% for todo in todos %}
-    <ul>{{ todo.title }} - {{ todo.level }} - {{ todo.created }}</ul>
-  {% endfor %}
-</ol>
+{% extends "base.html" %}
+{% load static %}
+
+{% block styles %}
+{% endblock styles %}
+
+{% block content %}
+  <header>
+    <div id="navbar"></div>
+  </header>
+  <div id="root"></div>
+{% endblock content %}
+
+{% block js %}
+  <script src="{% static 'site/todo/index.js' %}"></script>
+{% endblock js %}

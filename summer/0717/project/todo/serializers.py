@@ -9,7 +9,7 @@ class TodoSerializer(serializers.ModelSerializer):
         ('normal', 'Normal'),
         ('unimportant', 'Not important')
     ]
-    title = serializers.CharField(max_length=150, trim_whitespace=True)
+    title = serializers.CharField(max_length=50, trim_whitespace=True)
     desc = serializers.CharField(max_length=500, allow_blank=True)
     level = serializers.ChoiceField(choices=level_choices)
     created = serializers.DateTimeField()
