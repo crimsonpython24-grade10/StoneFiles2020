@@ -24,6 +24,15 @@ function compare(a, b) {
   return n - m;
 }
 
+function compareDate(a, b) {
+  for (var i = 0; i < a.length; i++) {
+    if (a[i] >= b[i]) {
+      return 1;
+    }
+  }
+  return -1;
+}
+
 const data = [
   {
     key: "1",
@@ -155,7 +164,7 @@ class App extends React.Component {
       {
         title: "Date", dataIndex: "date",
         key: "date", width: "25%",
-        sorter: (a, b) => a.date - b.date,
+        sorter: (a, b) => compareDate(a.date, b.date),
         sortOrder: sortedInfo.columnKey === "date" && sortedInfo.order,
         ellipsis: true
       },
