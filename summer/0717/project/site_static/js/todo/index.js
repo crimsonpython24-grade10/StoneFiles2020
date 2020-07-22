@@ -4,8 +4,8 @@ import "antd/dist/antd.css";
 import {Table, Button, Space, Tag, Input, Row, Col, Popconfirm, message, Typography } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
-import EditModal from "../components/todo/todoform";
 import Navbar from "../components/core/navbar";
+import reqwest from 'reqwest';
 
 const { Title } = Typography;
 
@@ -33,41 +33,46 @@ function compareDate(a, b) {
   return -1;
 }
 
+const getRandomuserParams = params => {
+  return {
+    results: params.pagination.pageSize,
+    page: params.pagination.current,
+    ...params,
+  };
+};
+
 class App extends React.Component {
   state = {
-    filteredInfo: null, sortedInfo: null,
-    data: [
-      {
-        key: "1",
-        title: "Call Uber eats w/o my parents",
-        date: "2020-07-20 07:57", levels: ["important"],
-        desc: "This not expandable", expd: false
-      },
-      {
-        key: "2",
-        title: "Have dinner",
-        date: "2020-07-21 07:57", levels: ["important"],
-        desc: "甲吧没 No", expd: true
-      },
-      {
-        key: "3",
-        title: "A normal sleep",
-        date: "2020-07-20 07:57", levels: ["normal"],
-        desc: "This not expandable", expd: false
-      },
-      {
-        key: "4",
-        title: "Sleep if I had been coding > 4 hrs",
-        date: "2020-07-20 07:57", levels: ["unimportant"],
-        desc: "No nothing. Yes code", expd: true
-      },
-      {
-        key: "5",
-        title: "School",
-        date: "2020-07-20 07:59", levels: ["unimportant"],
-        desc: "💩", expd: true
-      }
-    ]
+    filteredInfo: null, sortedInfo: null, data: [],
+    pagination: {current: 1, pageSize: 10}, loading: false,
+  };
+
+  componentDidMount() {
+    const { pagination } = this.state;
+    this.fetch({ pagination });
+  }
+
+  handleChange = (pagination, filters, sorter) => {
+    console.log("Various parameters", pagination, filters, sorter);
+    this.setState({ filteredInfo: filters, sortedInfo: sorter });
+    this.fetch({ pagination });
+  };
+
+  fetch = (params = {}) => {
+    this.setState({ loading: true });
+    reqwest({
+      url: 'http://127.0.0.1:8000/todo/api/todos/?format=json',
+      method: 'get',
+      type: 'json',
+      data: getRandomuserParams(params),
+    }).then(data => {
+      this.setState({
+        loading: false,
+        data: data.results,
+        pagination: {...params.pagination, total: data["count"],},
+      });
+      console.log(this.state.data);
+    });
   };
 
   getColumnSearchProps = dataIndex => ({
@@ -122,10 +127,6 @@ class App extends React.Component {
         />
       ) : (text)
   });
-  handleChange = (pagination, filters, sorter) => {
-    console.log("Various parameters", pagination, filters, sorter);
-    this.setState({ filteredInfo: filters, sortedInfo: sorter });
-  };
 
   handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -146,6 +147,7 @@ class App extends React.Component {
   onSelectChange = selectedRowKeys => {this.setState({ selectedRowKeys });};
 
   render() {
+    const { pagination, loading } = this.state;
     let { sortedInfo, filteredInfo } = this.state;
     sortedInfo = sortedInfo || {};
     filteredInfo = filteredInfo || {};
@@ -160,7 +162,7 @@ class App extends React.Component {
         sortOrder: sortedInfo.columnKey === "title" && sortedInfo.order,
         ellipsis: true,
         ...this.getColumnSearchProps("title"),
-        render: title => <EditModal title={title} />
+        // render: title => <EditModal title={title} />
       },
       {
         title: "Date", dataIndex: "date",
@@ -170,30 +172,19 @@ class App extends React.Component {
         ellipsis: true
       },
       {
-        title: "Level", dataIndex: "levels",
-        key: "levels", width: "23%",
+        title: "Level", dataIndex: "level",
+        key: "level", width: "23%",
         filters: [
           { text: "Important", value: "important" },
           { text: "Normal", value: "normal" },
           { text: "Unimportant", value: "unimportant" }
         ],
-        filteredValue: filteredInfo.levels || null,
-        onFilter: (value, record) => record.levels.includes(value),
-        sorter: (a, b) => compare(a.levels[0], b.levels[0]),
-        sortOrder: sortedInfo.columnKey === "levels" && sortedInfo.order,
+        filteredValue: filteredInfo.level || null,
+        onFilter: (value, record) => record.level.includes(value),
+        sorter: (a, b) => compare(a.level, b.level),
+        sortOrder: sortedInfo.columnKey === "level" && sortedInfo.order,
         ellipsis: true,
-        render: levels => (
-          <>
-            {levels.map(level => {
-              let color = "";
-              if (level === "important") {color = "red";}
-              else if (level === "normal") {color = "blue";}
-              return (
-                <Tag color={color} key={level}>{level.toUpperCase()}</Tag>
-              );
-            })}
-          </>
-        )
+        render: level => <Tag>{level.toUpperCase()}</Tag>
       },
       {
         title: "Action", dataIndex: "",
@@ -225,6 +216,7 @@ class App extends React.Component {
             <Table
               columns={columns} dataSource={this.state.data}
               onChange={this.handleChange} size="middle"
+              pagination={pagination} loading={loading}
               expandable={{
                 expandedRowRender: record => (
                   <p style={{ margin: 0, paddingLeft: 48 }}>{record.desc}</p>

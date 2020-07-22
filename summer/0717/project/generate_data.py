@@ -19,7 +19,7 @@ def populate(N = 10):
         fake_tmp = fakegen.catch_phrase()
         levels = ['important', 'normal', 'unimportant']
 
-        fake_title = fake_tmp if len(fake_tmp) <= 50 else (fake_tmp[:47] + '...')
+        fake_title = fake_tmp if len(fake_tmp) <= 40 else (fake_tmp[:37] + '...')
         fake_desc = fakegen.sentence(nb_words=70)
         fake_level = levels[random.randint(0, 2)]
 
