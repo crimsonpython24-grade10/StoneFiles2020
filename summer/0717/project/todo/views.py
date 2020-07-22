@@ -34,10 +34,9 @@ class IndexView(View):
 
     def post(self, request, *args, **kwargs):
         if 'delete' in request.POST.get("method"):
-            print('deleting')
+            Todo.objects.filter(id=request.POST.get("keyid")).delete()
             return JsonResponse({'success': True})
         else:
-            print('whatever')
             return JsonResponse({'success': False})
 
 

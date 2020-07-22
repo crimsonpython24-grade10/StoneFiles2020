@@ -49,15 +49,14 @@ async function postDeleteData(url = '', data = {}) {
   return response.json();
 }
 
-const confirm = () => {
+const confirm = (kid) => {
   message
     .loading("Deleting...", 1.8)
     .then(() => message.success("Todo item deleted!", 1.3));
-  postDeleteData('/todo/', { method: 'delete', keyid: '' })
+  postDeleteData('/todo/', { method: 'delete', keyid: kid["key"]})
     .then(data => {
       if (data.success) {window.location = '/todo/';}
     })
-  console.log('confirmed');
 };
 
 function compare(a, b) {
@@ -98,7 +97,6 @@ class App extends React.Component {
   }
 
   handleChange = (pagination, filters, sorter) => {
-    console.log("Various parameters", pagination, filters, sorter);
     this.setState({ filteredInfo: filters, sortedInfo: sorter });
     this.fetch({ pagination });
   };
@@ -116,7 +114,6 @@ class App extends React.Component {
         data: data.results,
         pagination: {...params.pagination, total: data["count"],},
       });
-      console.log(this.state.data);
     });
   };
 
@@ -242,17 +239,18 @@ class App extends React.Component {
         )
       },
       {
-        title: "Action", dataIndex: "",
-        key: "x", width: "12%",
-        render: () => (
+        title: "Action", dataIndex: "key",
+        key: "key", width: "12%",
+        render: key => (
           <Popconfirm
             placement="topRight"
             title="Are you sure to delete this task?"
-            onConfirm={confirm} okText="Yes" cancelText="No"
+            onConfirm={() => confirm({key})} okText="Yes" cancelText="No"
           >
             <a>delete</a>
           </Popconfirm>
-        )
+        ),
+        // render: title => <EditModal title={title} />
       }
     ];
     return (
