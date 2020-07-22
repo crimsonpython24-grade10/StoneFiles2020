@@ -33,41 +33,42 @@ function compareDate(a, b) {
   return -1;
 }
 
-const data = [
-  {
-    key: "1",
-    title: "Call Uber eats w/o my parents",
-    date: "2020-07-20 07:57", levels: ["important"],
-    desc: "This not expandable", expd: false
-  },
-  {
-    key: "2",
-    title: "Have dinner",
-    date: "2020-07-21 07:57", levels: ["important"],
-    desc: "甲吧没", expd: true
-  },
-  {
-    key: "3",
-    title: "A normal sleep",
-    date: "2020-07-20 07:57", levels: ["normal"],
-    desc: "This not expandable", expd: false
-  },
-  {
-    key: "4",
-    title: "Sleep if I had been coding > 4 hrs",
-    date: "2020-07-20 07:57", levels: ["unimportant"],
-    desc: "No nothing. Yes code", expd: true
-  },
-  {
-    key: "5",
-    title: "School",
-    date: "2020-07-20 07:59", levels: ["unimportant"],
-    desc: "💩", expd: true
-  }
-];
-
 class App extends React.Component {
-  state = { filteredInfo: null, sortedInfo: null };
+  state = {
+    filteredInfo: null, sortedInfo: null,
+    data: [
+      {
+        key: "1",
+        title: "Call Uber eats w/o my parents",
+        date: "2020-07-20 07:57", levels: ["important"],
+        desc: "This not expandable", expd: false
+      },
+      {
+        key: "2",
+        title: "Have dinner",
+        date: "2020-07-21 07:57", levels: ["important"],
+        desc: "甲吧没 No", expd: true
+      },
+      {
+        key: "3",
+        title: "A normal sleep",
+        date: "2020-07-20 07:57", levels: ["normal"],
+        desc: "This not expandable", expd: false
+      },
+      {
+        key: "4",
+        title: "Sleep if I had been coding > 4 hrs",
+        date: "2020-07-20 07:57", levels: ["unimportant"],
+        desc: "No nothing. Yes code", expd: true
+      },
+      {
+        key: "5",
+        title: "School",
+        date: "2020-07-20 07:59", levels: ["unimportant"],
+        desc: "💩", expd: true
+      }
+    ]
+  };
 
   getColumnSearchProps = dataIndex => ({
     filterDropdown: ({
@@ -222,7 +223,7 @@ class App extends React.Component {
               <Button onClick={this.clearAll}>Clear filters and sorters</Button>
             </Space>
             <Table
-              columns={columns} dataSource={data}
+              columns={columns} dataSource={this.state.data}
               onChange={this.handleChange} size="middle"
               expandable={{
                 expandedRowRender: record => (
