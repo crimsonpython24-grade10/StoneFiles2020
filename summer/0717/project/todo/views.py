@@ -9,12 +9,7 @@ from .serializers import TodoSerializer
 class IndexView(TemplateView):
     template_name = "todo/index.html"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['todos'] = Todo.objects.all()
-        return context
-
 
 class TodoViewSet(viewsets.ModelViewSet):
-    queryset = Todo.objects.all()
+    queryset = Todo.objects.get_queryset().order_by('id')
     serializer_class = TodoSerializer

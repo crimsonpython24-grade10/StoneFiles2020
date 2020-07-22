@@ -66,7 +66,7 @@ export default function Navbar() {
             className="site-page-header"
             subTitle="An online experience for MUN"
             tags={<Tag color="red">Testing</Tag>}
-            extra={[ <DropdownMenu key="more" />, <AccountDropdown key="account" /> ]}
+            // extra={[ <DropdownMenu key="more" />, <AccountDropdown key="account" /> ]}
           />
         </Col>
         <Col xs={24} sm={0} md={0} lg={0} xl={0}>
@@ -74,7 +74,7 @@ export default function Navbar() {
             title={<CardTitle/>}
             ghost={false}
             className="site-page-header"
-            extra={[ <DropdownMenu key="more" />, <AccountDropdown key="account" /> ]}
+            // extra={[ <DropdownMenu key="more" />, <AccountDropdown key="account" /> ]}
           />
         </Col>
       </Row>

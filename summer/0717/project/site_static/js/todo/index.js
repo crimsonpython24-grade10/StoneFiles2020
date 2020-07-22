@@ -162,7 +162,6 @@ class App extends React.Component {
         sortOrder: sortedInfo.columnKey === "title" && sortedInfo.order,
         ellipsis: true,
         ...this.getColumnSearchProps("title"),
-        // render: title => <EditModal title={title} />
       },
       {
         title: "Date", dataIndex: "date",
@@ -172,19 +171,30 @@ class App extends React.Component {
         ellipsis: true
       },
       {
-        title: "Level", dataIndex: "level",
-        key: "level", width: "23%",
+        title: "Level", dataIndex: "levels",
+        key: "levels", width: "23%",
         filters: [
           { text: "Important", value: "important" },
           { text: "Normal", value: "normal" },
           { text: "Unimportant", value: "unimportant" }
         ],
         filteredValue: filteredInfo.level || null,
-        onFilter: (value, record) => record.level.includes(value),
-        sorter: (a, b) => compare(a.level, b.level),
-        sortOrder: sortedInfo.columnKey === "level" && sortedInfo.order,
-        ellipsis: true,
-        render: level => <Tag>{level.toUpperCase()}</Tag>
+        onFilter: (value, record) => record.levels[0].includes(value),
+        sorter: (a, b) => compare(a.levels[0], b.levels[0]),
+        sortOrder: sortedInfo.columnKey === "levels" && sortedInfo.order,
+        ellipsis: true, 
+        render: levels => (
+          <>
+            {levels.map(level => {
+              let color = "";
+              if (level === "important") {color = "cyan";}
+              else if (level === "normal") {color = "blue";}
+              return (
+                <Tag color={color} key={level}>{level.toUpperCase()}</Tag>
+              );
+            })}
+          </>
+        )
       },
       {
         title: "Action", dataIndex: "",
@@ -204,7 +214,7 @@ class App extends React.Component {
       <>
         <Row justify="center" align="top">
           <Col style={{ maxWidth: 1080 }}>
-            <Title level={2} style={{ paddingTop: 30, paddingBottom: 15 }}>Todos</Title>
+            <Title level={2} style={{ paddingTop: 15, paddingBottom: 10 }}>Todos</Title>
           </Col>
         </Row>
         <Row justify="center" align="top">
@@ -221,7 +231,6 @@ class App extends React.Component {
                 expandedRowRender: record => (
                   <p style={{ margin: 0, paddingLeft: 48 }}>{record.desc}</p>
                 ),
-                rowExpandable: record => record.expd
               }}
             />
           </Col>
