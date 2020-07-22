@@ -5,6 +5,7 @@ import {Table, Button, Space, Tag, Input, Row, Col, Popconfirm, message, Typogra
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import Navbar from "../components/core/navbar";
+import EditModal from "../components/todo/todoform";
 import reqwest from 'reqwest';
 import jQuery, { data } from 'jquery';
 
@@ -26,11 +27,6 @@ function getCookie(name) {
 }
 
 var csrftoken = getCookie('csrftoken');
-const CSRFToken = () => {
-  return (
-    <input type="hidden" name="csrfmiddlewaretoken" value={csrftoken} />
-  );
-};
 
 async function postDeleteData(url = '', data = {}) {
   let csrftoken = getCookie('csrftoken');
@@ -51,12 +47,13 @@ async function postDeleteData(url = '', data = {}) {
 
 const confirm = (kid) => {
   message
-    .loading("Deleting...", 1.8)
-    .then(() => message.success("Todo item deleted!", 1.3));
-  postDeleteData('/todo/', { method: 'delete', keyid: kid["key"]})
-    .then(data => {
-      if (data.success) {window.location = '/todo/';}
-    })
+    .loading("Deleting...", 1.5)
+    .then(() => message.success("Todo item deleted!", 0.8))
+    .then(() => postDeleteData('/todo/', { method: 'delete', keyid: kid["key"]})
+      .then(data => {
+        if (data.success) {window.location = '/todo/';}
+      })
+    )
 };
 
 function compare(a, b) {
@@ -204,6 +201,7 @@ class App extends React.Component {
         sortOrder: sortedInfo.columnKey === "title" && sortedInfo.order,
         ellipsis: true,
         ...this.getColumnSearchProps("title"),
+        render: title => <EditModal title={title} />
       },
       {
         title: "Date", dataIndex: "date",
@@ -250,7 +248,6 @@ class App extends React.Component {
             <a>delete</a>
           </Popconfirm>
         ),
-        // render: title => <EditModal title={title} />
       }
     ];
     return (
