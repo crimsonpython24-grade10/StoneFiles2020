@@ -6,13 +6,58 @@ import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import Navbar from "../components/core/navbar";
 import reqwest from 'reqwest';
+import jQuery, { data } from 'jquery';
 
 const { Title } = Typography;
+
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    let cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      let cookie = jQuery.trim(cookies[i]);
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+var csrftoken = getCookie('csrftoken');
+const CSRFToken = () => {
+  return (
+    <input type="hidden" name="csrfmiddlewaretoken" value={csrftoken} />
+  );
+};
+
+async function postDeleteData(url = '', data = {}) {
+  let csrftoken = getCookie('csrftoken');
+
+  const formData = new FormData();
+  formData.append('method', data.method);
+  formData.append('keyid', data.keyid);
+
+  const response = await fetch(url, {
+    method: 'POST',
+    credentials: 'include',
+    mode: 'same-origin',
+    headers: {'X-CSRFToken': csrftoken,},
+    body: formData
+  });
+  return response.json();
+}
 
 const confirm = () => {
   message
     .loading("Deleting...", 1.8)
     .then(() => message.success("Todo item deleted!", 1.3));
+  postDeleteData('/todo/', { method: 'delete', keyid: '' })
+    .then(data => {
+      if (data.success) {window.location = '/todo/';}
+    })
+  console.log('confirmed');
 };
 
 function compare(a, b) {
