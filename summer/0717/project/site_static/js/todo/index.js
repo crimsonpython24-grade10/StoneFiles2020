@@ -186,6 +186,7 @@ class App extends React.Component {
   };
   onSelectChange = selectedRowKeys => {this.setState({ selectedRowKeys });};
 
+
   render() {
     const { pagination, loading } = this.state;
     let { sortedInfo, filteredInfo } = this.state;
@@ -194,15 +195,11 @@ class App extends React.Component {
     const columns = [
       {
         title: "Title", dataIndex: "title",
-        key: "key", width: "37%",
-        filters: [{ text: "Joe", value: "Joe" }, { text: "Jim", value: "Jim" }],
-        filteredValue: filteredInfo.title || null,
-        onFilter: (value, record) => record.title.includes(value),
+        key: "title", width: "37%",
         sorter: (a, b) => a.title.length - b.title.length,
         sortOrder: sortedInfo.columnKey === "title" && sortedInfo.order,
         ellipsis: true,
         ...this.getColumnSearchProps("title"),
-        // render: (title, key) => <UpdateModal title={title} idx={key["key"]} />
       },
       {
         title: "Date", dataIndex: "date",
@@ -242,7 +239,7 @@ class App extends React.Component {
         key: "key", width: "18%",
         render: key => (
           <>
-            <UpdateModal idx={key} />
+            <UpdateModal idx={key}/>
             <div style={{ width: 8, display: "inline-block" }}/>
             <Popconfirm
               placement="topRight"

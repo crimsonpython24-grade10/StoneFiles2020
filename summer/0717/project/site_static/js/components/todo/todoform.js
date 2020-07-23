@@ -59,14 +59,6 @@ class EditForm extends React.Component {
 
   handleTitleChange(event) {
     this.setState({ title: event.target.value });
-    if (event.target.value === "") {
-      this.setState({
-        titleProps: {
-          hasFeedback: true, validateStatus: "warning",
-          help: "Title cannot be empty"
-        }
-      });
-    } else {this.setState({ titleProps: {} });}
   }
   handleDescChange(event) {
     this.setState({ desc: event.target.value });
@@ -92,16 +84,19 @@ class EditForm extends React.Component {
   };
 
   handleSubmit = (event, idx) => {
-    setTimeout(() => {
-      event => event.preventDefault();
-      postData('/todo/', {
-        title: this.state.title, desc: this.state.desc,
-        level: this.state.level, method: 'update', idx: idx
-      })
-      .then(data => {
-        if (data.success) {window.location = '/todo/';}
-      });
-    }, 2250);
+    event => event.preventDefault();
+    postData('/todo/', {
+      title: this.state.title, desc: this.state.desc,
+      level: this.state.level, method: 'update', idx: idx
+    })
+    .then(data => {
+      if (data.success) {
+        this.enterLoading(0);
+        setTimeout(() => {
+          window.location = ('/todo/');
+        }, 2250)
+      }
+    });
   }
 
   render() {
@@ -112,20 +107,24 @@ class EditForm extends React.Component {
         onFinish={(event) => this.handleSubmit(event, this.props.idx)}
       >
         <Form.Item
-          name="title" label="Title"  {...this.state.titleProps}
-          onChange={this.handleTitleChange}
+          label="Title" style={{ marginBottom: 0}}
         >
-          <Input placeholder="Title" />
+          <Form.Item
+            name="title" onChange={this.handleTitleChange} 
+            {...this.state.titleProps}
+            rules={[{ required: true, message: "Title cannot be empty" }]}>
+            <Input placeholder="Title" />
+          </Form.Item>
         </Form.Item>
         <Form.Item
           name="desc" label="Description" {...this.state.descProps}
           onChange={this.handleDescChange}
-        >
+        > 
           <Input.TextArea placeholder="Description" />
         </Form.Item>
-        <Form.Item name="level" label="Level">
+        <Form.Item name="level" label="Level" initialvalue="normal">
           <Select
-            placeholder="Select..." initialvalue="normal" preserve="false"
+            placeholder="Select, defaults to normal" preserve="false"
             onChange={this.handleLvlChange}
           >
             <Option value="important">Important</Option>
@@ -138,7 +137,7 @@ class EditForm extends React.Component {
           <Col>
             <Form.Item style={{ marginTop: -14 }}>
               <Button
-                type="primary" htmlType="submit" loading={loadings[0]} onClick={() => this.enterLoading(0)}
+                type="primary" htmlType="submit" loading={loadings[0]}
               >
                 Submit
               </Button>
