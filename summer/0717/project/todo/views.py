@@ -36,13 +36,16 @@ class IndexView(View):
         if 'delete' in request.POST.get("method"):
             Todo.objects.filter(id=request.POST.get("keyid")).delete()
             return JsonResponse({'success': True})
-        elif 'edit' in request.POST.get("method"):
+        elif 'create' in request.POST.get("method"):
             t = request.POST.get("title")
             d = request.POST.get("desc")
             l = request.POST.get("level")
             td = Todo(title=t, desc=d, level=l)
             td.save()
             return JsonResponse({'success': True})
+        elif 'update' in request.POST.get("method"):
+            print("here")
+            return JsonResponse({'success': False})
         else:
             return JsonResponse({'success': False})
 

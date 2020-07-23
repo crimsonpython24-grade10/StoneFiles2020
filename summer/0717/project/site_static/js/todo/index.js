@@ -5,7 +5,7 @@ import {Table, Button, Space, Tag, Input, Row, Col, Popconfirm, message, Typogra
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import Navbar from "../components/core/navbar";
-import EditModal from "../components/todo/todoform";
+import UpdateModal from "../components/todo/todoform";
 import AddItemModal from "../components/todo/addtodo";
 import reqwest from 'reqwest';
 import jQuery, { data } from 'jquery';
@@ -194,7 +194,7 @@ class App extends React.Component {
     const columns = [
       {
         title: "Title", dataIndex: "title",
-        key: "title", width: "40%",
+        key: "key", width: "40%",
         filters: [{ text: "Joe", value: "Joe" }, { text: "Jim", value: "Jim" }],
         filteredValue: filteredInfo.title || null,
         onFilter: (value, record) => record.title.includes(value),
@@ -202,7 +202,7 @@ class App extends React.Component {
         sortOrder: sortedInfo.columnKey === "title" && sortedInfo.order,
         ellipsis: true,
         ...this.getColumnSearchProps("title"),
-        render: title => <EditModal title={title} />
+        render: (title, key) => <UpdateModal title={title} idx={key["key"]} />
       },
       {
         title: "Date", dataIndex: "date",
