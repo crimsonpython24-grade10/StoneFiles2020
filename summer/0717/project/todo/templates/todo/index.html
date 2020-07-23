@@ -2,7 +2,10 @@
 {% load static %}
 
 {% block styles %}
-<style>.ant-modal-body {padding-bottom: 0px !important;}</style>
+<style>
+  .ant-modal-body {padding-bottom: 0px !important; margin-bottom: -15px}
+  .ant-modal-footer {border: none; height: 0px; padding: 0px !important}
+</style>
 {% endblock styles %}
 
 {% block content %}
@@ -15,7 +18,4 @@
 {% block js %}
   <script src="{% static 'site/todo/index.js' %}"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script>
-    // $(".ant-modal-footer").remove();
-  </script>
 {% endblock js %}

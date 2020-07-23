@@ -6,6 +6,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import Navbar from "../components/core/navbar";
 import EditModal from "../components/todo/todoform";
+import AddItemModal from "../components/todo/addtodo";
 import reqwest from 'reqwest';
 import jQuery, { data } from 'jquery';
 
@@ -260,6 +261,7 @@ class App extends React.Component {
         <Row justify="center" align="top">
           <Col style={{ maxWidth: 1080 }}>
             <Space style={{ marginBottom: 16 }}>
+              <AddItemModal/>
               <Button onClick={this.clearFilters}>Clear filters</Button>
               <Button onClick={this.clearAll}>Clear filters and sorters</Button>
             </Space>
