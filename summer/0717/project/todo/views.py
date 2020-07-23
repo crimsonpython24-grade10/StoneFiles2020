@@ -1,18 +1,3 @@
-from django.views.generic.base import TemplateView
-
-from rest_framework import viewsets
-
-from .models import Todo
-from .serializers import TodoSerializer
-
-
-class IndexView(TemplateView):
-    template_name = "todo/index.html"
-
-
-class TodoViewSet(viewsets.ModelViewSet):
-    queryset = Todo.objects.get_queryset().order_by('id')
-    serializer_class = TodoSerializer
 from django.views import View
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
@@ -44,8 +29,12 @@ class IndexView(View):
             td.save()
             return JsonResponse({'success': True})
         elif 'update' in request.POST.get("method"):
-            print("here")
-            return JsonResponse({'success': False})
+            td = Todo.objects.filter(id=request.POST.get("idx"))
+            t = request.POST.get("title")
+            d = request.POST.get("desc")
+            l = request.POST.get("level")
+            td.update(title=t, desc=d, level=l)
+            return JsonResponse({'success': True})
         else:
             return JsonResponse({'success': False})
 

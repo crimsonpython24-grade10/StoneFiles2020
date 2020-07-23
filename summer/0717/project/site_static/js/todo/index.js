@@ -194,7 +194,7 @@ class App extends React.Component {
     const columns = [
       {
         title: "Title", dataIndex: "title",
-        key: "key", width: "40%",
+        key: "key", width: "37%",
         filters: [{ text: "Joe", value: "Joe" }, { text: "Jim", value: "Jim" }],
         filteredValue: filteredInfo.title || null,
         onFilter: (value, record) => record.title.includes(value),
@@ -202,18 +202,18 @@ class App extends React.Component {
         sortOrder: sortedInfo.columnKey === "title" && sortedInfo.order,
         ellipsis: true,
         ...this.getColumnSearchProps("title"),
-        render: (title, key) => <UpdateModal title={title} idx={key["key"]} />
+        // render: (title, key) => <UpdateModal title={title} idx={key["key"]} />
       },
       {
         title: "Date", dataIndex: "date",
-        key: "date", width: "25%",
+        key: "date", width: "23%",
         sorter: (a, b) => compareDate(a.date, b.date),
         sortOrder: sortedInfo.columnKey === "date" && sortedInfo.order,
         ellipsis: true
       },
       {
         title: "Level", dataIndex: "levels",
-        key: "levels", width: "23%",
+        key: "levels", width: "22%",
         filters: [
           { text: "Important", value: "important" },
           { text: "Normal", value: "normal" },
@@ -239,15 +239,19 @@ class App extends React.Component {
       },
       {
         title: "Action", dataIndex: "key",
-        key: "key", width: "12%",
+        key: "key", width: "18%",
         render: key => (
-          <Popconfirm
-            placement="topRight"
-            title="Are you sure to delete this task?"
-            onConfirm={() => confirm({key})} okText="Yes" cancelText="No"
-          >
-            <a>delete</a>
-          </Popconfirm>
+          <>
+            <UpdateModal idx={key} />
+            <div style={{ width: 8, display: "inline-block" }}/>
+            <Popconfirm
+              placement="topRight"
+              title="Are you sure to delete this task?"
+              onConfirm={() => confirm({key})} okText="Yes" cancelText="No"
+            >
+              <a>delete</a>
+            </Popconfirm>
+          </>
         ),
       }
     ];

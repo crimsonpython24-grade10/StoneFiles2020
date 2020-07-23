@@ -32,7 +32,6 @@ async function postData(url = '', data = {}) {
   formData.append('desc', data.desc);
   formData.append('level', data.level);
   formData.append('idx', data.idx);
-  console.log(data.idx);
 
   const response = await fetch(url, {
     method: 'POST',
@@ -86,10 +85,10 @@ class EditForm extends React.Component {
         newLoadings[index] = false;
         return { loadings: newLoadings };
       });
-    }, 1800);
+    }, 1200);
     setTimeout(() => {
       message.success("Todo item updated!", 0.8);
-    }, 2050);
+    }, 1450);
   };
 
   handleSubmit = (event, idx) => {
@@ -102,8 +101,7 @@ class EditForm extends React.Component {
       .then(data => {
         if (data.success) {window.location = '/todo/';}
       });
-      console.log(idx);
-    }, 2850);
+    }, 2250);
   }
 
   render() {
@@ -111,7 +109,7 @@ class EditForm extends React.Component {
     return (
       <Form
         {...layout} ref={this.formRef} name="control-ref" preserve={false}
-        onFinish={() => this.handleSubmit(this.props.idx)}
+        onFinish={(event) => this.handleSubmit(event, this.props.idx)}
       >
         <Form.Item
           name="title" label="Title"  {...this.state.titleProps}
@@ -161,7 +159,7 @@ class UpdateModal extends React.Component {
     const { visible, confirmLoading } = this.state;
     return (
       <>
-        <span onClick={this.showModal}>{ this.props.idx }{ this.props.title }</span>
+        <a onClick={this.showModal}>update</a>
         <Modal
           title="Update Todo Item" visible={visible}
           confirmLoading={confirmLoading} onCancel={this.handleCancel}
