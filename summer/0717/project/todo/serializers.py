@@ -11,11 +11,19 @@ class LevelsField(serializers.Field):
         return ','.join(data)
 
 
+class ExpandField(serializers.Field):
+    def to_representation(self, value):
+        if (value.desc != ""):
+            return True
+        else:
+            return False
+
+
 class TodoSerializer(serializers.ModelSerializer):
     key = serializers.IntegerField(source='id')
     levels = LevelsField(source='*')
     date = serializers.DateTimeField(source='created', format="%Y-%m-%d %H:%M", read_only=True)
-    expd = serializers.BooleanField(default=True)
+    expd = ExpandField(source="*")
 
     class Meta:
         model = Todo

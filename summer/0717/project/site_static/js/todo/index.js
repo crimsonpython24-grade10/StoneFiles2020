@@ -48,7 +48,7 @@ async function postDeleteData(url = '', data = {}) {
 
 const confirm = (kid) => {
   message
-    .loading("Deleting...", 1.5)
+    .loading("Deleting...", 1.2)
     .then(() => message.success("Todo item deleted!", 0.8))
     .then(() => postDeleteData('/todo/', { method: 'delete', keyid: kid["key"]})
       .then(data => {
@@ -273,6 +273,7 @@ class App extends React.Component {
                 expandedRowRender: record => (
                   <p style={{ margin: 0, paddingLeft: 48 }}>{record.desc}</p>
                 ),
+                rowExpandable: record => record.expd === true,
               }}
             />
           </Col>

@@ -51,7 +51,7 @@ const AccountDropdown = () => {
 
 const CardTitle = () => {
   return (
-    <Link href={ index_url }><Title level={4} style={{ margin: 0 }}>vMun</Title></Link>
+    <Link href={ index_url }><Title level={4} style={{ margin: 0 }}>Assignments</Title></Link>
   )
 }
 
@@ -64,7 +64,7 @@ export default function Navbar() {
             title={<CardTitle/>}
             ghost={false}
             className="site-page-header"
-            subTitle="An online experience for MUN"
+            subTitle="() => dump homework here"
             tags={<Tag color="red">Testing</Tag>}
             // extra={[ <DropdownMenu key="more" />, <AccountDropdown key="account" /> ]}
           />
