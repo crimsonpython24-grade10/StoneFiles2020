@@ -5,30 +5,32 @@ void solve() {
     string s;
     cin >> s;
 
-    int len [s.length()/2+1];
-    for (int i=0; i<s.length()/2+1; ++i)
-        len[i] = 0;
+    // array of consecutives, worst n/2+1
+    int cons[s.length()/2+1] = {0};
+    int idx = 0;
+    int n = sizeof(cons)/sizeof(cons[0]);
 
+    // calculate maximum consecs
     for (int i=0; i<s.length(); ++i) {
-        int cnt = 0;
         if (s[i] == '1') {
-            int tmp = 1;
-            while (s[i+tmp] == 1) {
+            int tmp = 0;
+            while (s[i] == '1') {
                 ++tmp;
+                ++i;
             }
-            cout << tmp << endl;
-            len[cnt] = tmp;
-            ++cnt;
-            i += tmp;
+            cons[idx] = tmp;
+            ++idx;
         }
     }
+    
+    sort(cons, cons+n, greater<int>());
 
+    int ans = 0;
     for (int i=0; i<s.length()/2+1; ++i) {
-        cout << len[i] << " ";
+        if (i % 2 == 0) ans += cons[i];
     }
 
-    cout << endl;
-
+    cout << ans << endl;
 }
 
 int main() {

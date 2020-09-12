@@ -1,10 +1,16 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// init. position of A: n, abs. diff.: k
+
 void solve() {
     int n, k;
     cin >> n >> k;
-    cout << abs(n-k) << endl;
+    if (k > n)
+        cout << k-n << endl;
+    else
+        cout << (n-k)%2 << endl;
+    return;
 }
 
 int main() {
